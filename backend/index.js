@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 connectMongoDB()
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-    origin: "http://localhost:5173", // Replace with your frontend's origin
+    origin: ["http://localhost:5173", "https://kupafoods.vercel.app"], // Replace with your frontend's origin
     credentials: true, // Allow cookies to be sent
 }))
 app.use(express.json())
