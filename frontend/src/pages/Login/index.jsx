@@ -81,7 +81,7 @@ const Login = () => {
 			navigate("/profile");
 		} catch (error) {
 			if (error.code === "auth/popup-closed-by-user") {
-				toast.error("You cancelled registration");
+				toast.error("You cancelled login");
 				dispatch(setLoading(false));
 			} else {
 				toast.error(error.data);
