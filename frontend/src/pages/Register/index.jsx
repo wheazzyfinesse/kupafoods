@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../../redux/utils/zodSchema";
 import { auth, googleProvider } from "../../redux/utils/firebase";
 import { signInWithPopup } from "firebase/auth";
-import { LuLoader, LuLoader2 } from "react-icons/lu";
+import { LuLoader2 } from "react-icons/lu";
 
 const Register = () => {
 	const [showPassword, setShowPassword] = useState(false);

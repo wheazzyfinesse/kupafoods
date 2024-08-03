@@ -6,6 +6,7 @@ import { IoMdClose } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../Button";
 import { removeCredentials } from "../../redux/features/userSlice";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
 	const [showMenu, setShowMenu] = useState(false);
@@ -15,6 +16,7 @@ const Navbar = () => {
 	const dispatch = useDispatch();
 	const LogoutHandler = () => {
 		dispatch(removeCredentials());
+		toast.success("You logged out successfully");
 	};
 	const toggleMenu = () => {
 		setShowMenu((prev) => !prev);
