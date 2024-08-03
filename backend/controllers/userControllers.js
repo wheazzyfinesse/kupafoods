@@ -36,7 +36,7 @@ const login = async (req, res) => {
         console.log(console.log(user))
         if (!user) return res.status(401).json("Invalid Credentials! Please check your credentials or register to create an account")
 
-        if (!req.body.password) {
+        if (!password) {
             if (req.body.providerId === "google.com") {
                 const userId = user._id
                 const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "1d" })

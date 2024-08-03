@@ -4,7 +4,6 @@
 	padding: 20px;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	gap: 10px;
 }
 
@@ -47,6 +46,7 @@
 	color: teal;
 	margin-top: 5px;
 }
+
 .socialAuth > p {
 	display: flex;
 	gap: 10px;
@@ -56,4 +56,9 @@
 	margin: 10px 0px;
 	border-radius: 5px;
 	justify-content: center;
+	cursor: pointer;
+}
+
+.info {
+	text-align: center;
 }

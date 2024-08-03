@@ -1,10 +1,15 @@
 import { LuLoader } from "react-icons/lu";
 import styles from "./Button.module.css";
 
-const Button = ({ children, isLoading }) => {
+const Button = ({ type, children, isLoading, onClick }) => {
 	return (
-		<button type="submit" className={styles.button}>
-			{isLoading ? <LuLoader size={24} color="white" /> : children}
+		<button
+			type={type}
+			disabled={isLoading}
+			className={styles.button}
+			onClick={onClick}
+		>
+			{isLoading ? <LuLoader size={24} color="" /> : children}
 		</button>
 	);
 };

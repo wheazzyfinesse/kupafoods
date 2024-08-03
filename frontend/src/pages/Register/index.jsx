@@ -1,22 +1,24 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./Register.module.css";
 import { useRegisterMutation } from "../../redux/api/userApiSlice";
-import { setCredentials } from "../../redux/features/userSlice";
+import { setCredentials, setLoading } from "../../redux/features/userSlice";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import Button from "../../components/Button";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../../redux/utils/zodSchema";
 import { auth, googleProvider } from "../../redux/utils/firebase";
 import { signInWithPopup } from "firebase/auth";
+import { LuLoader, LuLoader2 } from "react-icons/lu";
 
 const Register = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [register, { isLoading }] = useRegisterMutation();
+	const { isLoggedIn, loading } = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 	const {
 		register: registerInput,
@@ -31,21 +33,27 @@ const Register = () => {
 		setShowPassword((prev) => !prev);
 	};
 	const registerHandler = async (formData) => {
+		console.log(formData);
 		try {
-			const res = await register(formData);
-			if (res.error) {
-				return toast.error(res.error.data);
+			const response = await register(formData);
+			if (response.error) {
+				return toast.error(response.error.data);
 			}
-			dispatch(setCredentials(res));
+			console.log(response);
+			dispatch(setCredentials(response.data.userInfo.username));
+			localStorage.setItem("token", response.data.token);
+
 			toast.success(
-				`Hey ${res.data.username}! Your registration was succesful`,
+				`Hey ${response.data.userInfo.username}! Your registration was succesfull`,
 			);
 			navigate("/profile");
 		} catch (error) {
+			console.log(error);
 			toast.error(error.data);
 		}
 	};
 	const registerWithGoogleHandler = async () => {
+		dispatch(setLoading(true));
 		try {
 			const res = await signInWithPopup(auth, googleProvider);
 
@@ -58,25 +66,52 @@ const Register = () => {
 			};
 			const response = await register(data);
 			if (response.error) {
+				dispatch(setLoading(false));
+
 				return toast.error(response.error.data);
 			}
-			dispatch(setCredentials(response.userInfo));
+			dispatch(setCredentials(response.data.userInfo.username));
 			localStorage.setItem("token", response.data.token);
 
 			toast.success(
-				`Hey ${response.data.username}! Your registration was succesful`,
+				`Hey ${response.data.userInfo.username}! Your registration was succesful`,
 			);
+			dispatch(setLoading(false));
+
 			navigate("/profile");
 		} catch (error) {
-			console.log(error);
-			toast.error(error.data);
+			if (error.code === "auth/popup-closed-by-user") {
+				toast.error("You cancelled registration");
+				dispatch(setLoading(false));
+			} else {
+				toast.error(error.data);
+
+				console.log(error);
+			}
 		}
 	};
-
+	useEffect(() => {
+		if (isLoggedIn) {
+			console.log(isLoggedIn);
+			navigate("/");
+		}
+	}, [isLoggedIn, navigate]);
 	return (
 		<div className={styles.container}>
 			<h2>Register</h2>
 			<p className={styles.caption}>Create an account and start shopping!</p>
+			<div className={styles.socialAuth}>
+				<p
+					className={`${loading ? "disablegooglebtn" : ""} google`}
+					onClick={registerWithGoogleHandler}
+					aria-disabled={loading}
+					role="button"
+				>
+					<FcGoogle size={20} />{" "}
+					{loading ? <LuLoader2 size={24} /> : "Register with Google"}
+				</p>
+			</div>
+			<p style={{ textAlign: "center" }}>OR</p>
 			<form
 				onSubmit={handleSubmit(registerHandler)}
 				className={styles.formContainer}
@@ -138,7 +173,9 @@ const Register = () => {
 						)}
 					</span>
 				</div>
-				<Button isLoading={isLoading}>Register</Button>
+				<Button type="submit" isLoading={isLoading}>
+					Register
+				</Button>
 			</form>
 
 			<div className={styles.infoContainer}>
@@ -160,12 +197,6 @@ const Register = () => {
 					<Link to="/privacypolicy" className={styles.caption}>
 						Terms & Data Policy
 					</Link>
-				</p>
-			</div>
-			<p style={{ textAlign: "center" }}>OR</p>
-			<div className={styles.socialAuth}>
-				<p className="google" onClick={registerWithGoogleHandler}>
-					<FcGoogle size={20} /> Register with Google
 				</p>
 			</div>
 		</div>

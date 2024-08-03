@@ -1,27 +1,39 @@
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Login.module.css";
 import { useLoginMutation } from "../../redux/api/userApiSlice";
-import { setCredentials } from "../../redux/features/userSlice";
+import { setCredentials, setLoading } from "../../redux/features/userSlice";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import Button from "../../components/Button";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../redux/utils/firebase";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { baseSchema } from "../../redux/utils/zodSchema";
+import { LuLoader2 } from "react-icons/lu";
 
 const Login = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [login, { isLoading, error }] = useLoginMutation();
-	const { isLoggedIn, user } = useSelector((state) => state.user);
-	console.log(user, isLoggedIn);
+	const { isLoggedIn, loading } = useSelector((state) => state.user);
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		resolver: zodResolver(baseSchema),
+	});
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const togglePasswordVisibility = () => {
 		setShowPassword((prev) => !prev);
 	};
 	const LoginUserHandler = async (formData) => {
+		console.log(formData);
 		try {
 			const response = await login(formData);
 			if (response.error) {
@@ -41,6 +53,8 @@ const Login = () => {
 	};
 
 	const loginWithGoogleHandler = async () => {
+		dispatch(setLoading(true));
+
 		try {
 			const res = await signInWithPopup(auth, googleProvider);
 
@@ -62,31 +76,61 @@ const Login = () => {
 			toast.success(
 				`Hey ${response.data.userInfo.username}! You logged in succesfully`,
 			);
+			dispatch(setLoading(false));
+
 			navigate("/profile");
 		} catch (error) {
-			console.log(error);
-			toast.error(error.data);
+			if (error.code === "auth/popup-closed-by-user") {
+				toast.error("You cancelled registration");
+				dispatch(setLoading(false));
+			} else {
+				toast.error(error.data);
+
+				console.log(error);
+			}
 		}
 	};
 
 	useEffect(() => {
-		if (user) {
-			console.log(user);
+		if (isLoggedIn) {
 			navigate("/");
 		}
-	}, [user, navigate]);
+	}, [isLoggedIn, navigate]);
 	return (
 		<div className={styles.container}>
 			<h2>Login</h2>
-			<p className={styles.caption}>login to your account to start shopping</p>
-			<form onSubmit={LoginUserHandler} className={styles.formContainer}>
+			<p className={styles.caption}>Login to your account to start shopping</p>
+			<div className={styles.socialAuth}>
+				<p
+					className={`${loading ? "disablegooglebtn" : ""} google`}
+					onClick={loginWithGoogleHandler}
+					aria-disabled={loading}
+					role="button"
+				>
+					<FcGoogle size={20} />{" "}
+					{loading ? <LuLoader2 size={24} /> : "Login with Google"}
+				</p>
+			</div>
+			<p className={styles.info}>OR</p>
+			<form
+				onSubmit={handleSubmit(LoginUserHandler)}
+				className={styles.formContainer}
+			>
 				<label>Email</label>
-				<div className={styles.formData}>
-					<input type="email" placeholder="Enter your email" />
-				</div>
-				<label>Password</label>
+				{errors.email && <p className="error">{errors.email.message}</p>}
 				<div className={styles.formData}>
 					<input
+						{...register("email")}
+						type="email"
+						placeholder="Enter your email"
+					/>
+				</div>
+				<label>Password</label>
+				{errors.password && <p className="error">{errors.password.message}</p>}
+
+				<div className={styles.formData}>
+					<input
+						{...register("password")}
 						type={showPassword ? "text" : "password"}
 						placeholder="Enter your password"
 					/>
@@ -99,7 +143,9 @@ const Login = () => {
 					</span>
 				</div>
 
-				<Button isLoading={isLoading}>Login</Button>
+				<Button type="submit" isLoading={isLoading}>
+					Login
+				</Button>
 				{error && <p>{error.message}</p>}
 			</form>
 
@@ -114,13 +160,6 @@ const Login = () => {
 					<Link to="/forgotpassword" className={styles.caption}>
 						Forgotten Password
 					</Link>
-				</p>
-
-				<p className={styles.info}>OR</p>
-			</div>
-			<div className={styles.socialAuth}>
-				<p className="google" onClick={loginWithGoogleHandler}>
-					<FcGoogle size={20} /> Login with Google
 				</p>
 			</div>
 		</div>

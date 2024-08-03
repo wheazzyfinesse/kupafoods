@@ -16,3 +16,10 @@ a {
 .error {
 	color: red;
 }
+.google {
+	cursor: "pointer";
+}
+.disablegooglebtn {
+	opacity: 0.6; /* Visual feedback for disabled state */
+	pointer-events: none; /* Prevent clicks */
+}

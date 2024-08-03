@@ -3,16 +3,18 @@ import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { CiMenuFries, CiShoppingCart, CiUser } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../Button";
+import { removeCredentials } from "../../redux/features/userSlice";
 
 const Navbar = () => {
 	const [showMenu, setShowMenu] = useState(false);
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const { user, isLoggedIn } = useSelector((state) => state.user);
-	console.log(user);
+
+	const dispatch = useDispatch();
 	const LogoutHandler = () => {
-		console.log(isLoggedIn);
+		dispatch(removeCredentials());
 	};
 	const toggleMenu = () => {
 		setShowMenu((prev) => !prev);
@@ -42,7 +44,16 @@ const Navbar = () => {
 						</Link>
 						<p className={styles.cartCount}>19</p>
 					</div>
-					<CiUser size={24} onClick={toggleUserMenu} />
+					{isLoggedIn ? (
+						<img
+							style={{ width: "30px", height: "30px", borderRadius: "50%" }}
+							src={user?.image}
+							onClick={toggleUserMenu}
+							alt="user image"
+						/>
+					) : (
+						<CiUser size={24} onClick={toggleUserMenu} />
+					)}
 					<CiMenuFries size={24} onClick={toggleMenu} />
 				</div>
 			</div>
@@ -80,6 +91,7 @@ const Navbar = () => {
 						{isLoggedIn && (
 							<>
 								<li onClick={toggleUserMenu}>
+									<CiUser size={24} color="white" style={{ color: "white" }} />
 									<Link to="/profile">Profile</Link>
 								</li>
 								<li onClick={toggleUserMenu}>
@@ -91,7 +103,7 @@ const Navbar = () => {
 								<li onClick={toggleUserMenu}>
 									<Link to="/orders">Orders</Link>
 								</li>
-								{isLoggedIn && (
+								{user.isAdmin && (
 									<>
 										<li onClick={toggleUserMenu}>
 											<Link to="/admin/dashboard">Admin Dashboard</Link>
@@ -111,20 +123,24 @@ const Navbar = () => {
 									</>
 								)}
 								<li>
-									<Button onClick={() => LogoutHandler()}>Logout</Button>
+									<Button onClick={LogoutHandler}>Logout</Button>
 								</li>
 							</>
 						)}
-						<li onClick={toggleUserMenu}>
-							<Link to="/login">
-								<Button>Login</Button>
-							</Link>
-						</li>
-						<li onClick={toggleUserMenu}>
-							<Link to="/register">
-								<Button>Register</Button>
-							</Link>
-						</li>
+						{!isLoggedIn && (
+							<>
+								<li onClick={toggleUserMenu}>
+									<Link to="/login">
+										<Button>Login</Button>
+									</Link>
+								</li>
+								<li onClick={toggleUserMenu}>
+									<Link to="/register">
+										<Button>Register</Button>
+									</Link>
+								</li>
+							</>
+						)}
 					</ul>
 				</div>
 			)}

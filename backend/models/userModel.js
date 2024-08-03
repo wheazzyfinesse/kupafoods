@@ -19,12 +19,21 @@ const userSchema = mongoose.Schema({
     },
 
     uid: {
-        type: String, default: "",
+        type: String,
+        default: "",
 
     },
     ProviderId: {
         type: String,
         default: "",
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    },
+    isVerified: {
+        type: Boolean,
+        default: false,
     }
 
 
