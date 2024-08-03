@@ -1,0 +1,54 @@
+.container {
+	background-color: teal;
+	width: 100%;
+	color: white;
+	height: 50px;
+	padding: 10px;
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+	align-items: center;
+}
+.menuIcon {
+	cursor: pointer;
+	display: flex;
+	gap: 10px;
+}
+.cartIcon {
+	position: relative;
+}
+.cartCount {
+	position: absolute;
+	top: -10px;
+	right: -10px;
+	background-color: red;
+	color: white;
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	font-weight: bold;
+}
+.navMenu {
+	position: absolute;
+	width: 80%;
+	height: 100vh;
+	z-index: 9999;
+	top: 0;
+	right: 0;
+	background-color: rgb(201, 248, 248);
+	transition: all;
+	padding: 20px;
+}
+
+.navMenu ul {
+	list-style-type: none;
+}
+.close {
+	position: absolute;
+	top: 0;
+	margin: 10px;
+	right: 0;
+}
