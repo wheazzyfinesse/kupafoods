@@ -102,7 +102,7 @@ const Login = () => {
 			<p className={styles.caption}>Login to your account to start shopping</p>
 			<div className={styles.socialAuth}>
 				<p
-					className={`${loading ? "disablegooglebtn" : ""} google`}
+					className={loading ? styles.disablegooglebtn : styles.google}
 					onClick={loginWithGoogleHandler}
 					aria-disabled={loading}
 					role="button"

@@ -5,7 +5,7 @@
 	box-sizing: border-box;
 	scroll-behavior: smooth;
 	font-family: "Lato", sans-serif;
-	color: rgb(54, 54, 54);
+	/* color: rgb(54, 54, 54); */
 }
 ul li,
 ul li a,
@@ -15,11 +15,4 @@ a {
 }
 .error {
 	color: red;
-}
-.google {
-	cursor: "pointer";
-}
-.disablegooglebtn {
-	opacity: 0.6; /* Visual feedback for disabled state */
-	pointer-events: none; /* Prevent clicks */
 }

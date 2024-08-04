@@ -1,0 +1,14 @@
+.slidercard {
+	width: 130px;
+	height: 250px;
+	display: flex;
+	gap: 10px;
+	flex-direction: column;
+	border-radius: 5px;
+}
+.productimage {
+	width: 130px;
+	height: 150px;
+	border-radius: 5px;
+	margin-bottom: 5px;
+}

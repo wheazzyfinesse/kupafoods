@@ -22,6 +22,8 @@ import VerifyEmail from "./pages/VerifyEmail/index.jsx";
 import ForgotPassword from "./pages/ForgotPassword/index.jsx";
 import ContactUs from "./pages/ContactUs/index.jsx";
 import AboutUs from "./pages/AboutUs/index.jsx";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<>

@@ -102,7 +102,7 @@ const Register = () => {
 			<p className={styles.caption}>Create an account and start shopping!</p>
 			<div className={styles.socialAuth}>
 				<p
-					className={`${loading ? "disablegooglebtn" : ""} google`}
+					className={loading ? styles.disablegooglebtn : styles.google}
 					onClick={registerWithGoogleHandler}
 					aria-disabled={loading}
 					role="button"

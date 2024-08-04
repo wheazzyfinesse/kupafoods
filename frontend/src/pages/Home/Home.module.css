@@ -1,5 +1,50 @@
 .container {
 	width: 100%;
 	height: calc(100vh - 50px);
-	background-color: teal;
+	padding: 10px;
+}
+.formContainer {
+	display: flex;
+	width: 100%;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	align-items: center;
+	border: 1px solid teal;
+}
+.formContainer input {
+	height: 40px;
+	width: 100%;
+	outline: none;
+	border-radius: 5px;
+	border: none;
+	padding: 5px;
+	font-size: 14px;
+}
+
+.heroCard {
+	height: 150px;
+	width: 100%;
+	border-radius: 5px;
+	padding: 10px;
+	background-color: rgb(183, 254, 254);
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	margin-bottom: 10px;
+	justify-content: space-between;
+}
+.heroContent {
+	display: flex;
+	flex-direction: column;
+	gap: 7px;
+}
+.hero {
+	width: 120px;
+	height: 100%;
+	border-radius: 5px;
+}
+.slider {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
 }
