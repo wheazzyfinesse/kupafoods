@@ -1,0 +1,21 @@
+.slick-slider {
+	margin: 0 auto; /* Center the slider horizontally */
+}
+
+.slick-list {
+	padding: 0 15px; /* Optional: add some padding around the slides */
+}
+
+.slick-slide {
+	text-align: center; /* Center the content of each slide */
+}
+
+.slick-prev,
+.slick-next {
+	z-index: 1; /* Ensure arrows are above the content */
+	color: #cc0000; /* Change arrow color */
+}
+
+.slick-dots {
+	bottom: -30px; /* Adjust the position of the dots */
+}

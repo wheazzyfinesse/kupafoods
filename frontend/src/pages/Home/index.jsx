@@ -3,6 +3,8 @@ import styles from "./Home.module.css";
 import Button from "../../components/Button/index";
 import { Link } from "react-router-dom";
 import Slide from "../../components/Slide";
+import Newsletter from "../../components/Newsletter";
+import Contactus from "../../components/Contactus";
 const Home = () => {
 	return (
 		<div className={styles.container}>
@@ -26,8 +28,16 @@ const Home = () => {
 					className={styles.hero}
 				/>
 			</div>
-			<div className={styles.category}></div>
+			<ul className={styles.category}>
+				<li>Vegetabale Oil</li>
+				<li>Rice</li>
+				<li>Frozen food</li>
+				<li>Pasta</li>
+				<li>Water</li>
+			</ul>
 			<Slide />
+			<Newsletter />
+			<Contactus />
 		</div>
 	);
 };
